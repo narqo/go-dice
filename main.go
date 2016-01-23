@@ -4,10 +4,13 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"os"
 	"strconv"
 
 	"github.com/narqo/go-dice/dice"
 )
+
+var port string
 
 func rollDice(w http.ResponseWriter, req *http.Request) {
 	q, _ := url.ParseQuery(req.URL.RawQuery)
@@ -26,8 +29,13 @@ func rollDice(w http.ResponseWriter, req *http.Request) {
 }
 
 func main() {
+	port := os.Getenv("PORT")
+	if port == "" {
+		log.Fatal("$PORT was not set")
+	}
+
 	http.HandleFunc("/roll", rollDice)
-	err := http.ListenAndServe(":8080", nil)
+	err := http.ListenAndServe(":" + port, nil)
 	if err != nil {
 		log.Fatal("Cannot lister:", err)
 	}
