@@ -14,7 +14,7 @@ var port string
 
 func rollDice(w http.ResponseWriter, req *http.Request) {
 	q, _ := url.ParseQuery(req.URL.RawQuery)
-	dn, ok := q["dice"]
+	dn, ok := q["text"]
 	if !ok {
 		w.WriteHeader(http.StatusBadRequest)
 		return
