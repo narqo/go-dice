@@ -4,5 +4,10 @@
 	"Packages": [
 		"./..."
 	],
-	"Deps": []
+	"Deps": [
+		{
+			"ImportPath": "github.com/apex/log",
+			"Rev": "0df6dd6f3beb679ea47ec11b3aefc4edeed12f9f"
+		}
+	]
 }

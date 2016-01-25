@@ -1,13 +1,14 @@
 package main
 
 import (
-	"log"
 	"net/http"
 	"net/url"
 	"os"
 	"strconv"
 
 	"github.com/narqo/go-dice/dice"
+	"github.com/narqo/go-dice/Godeps/_workspace/src/github.com/apex/log"
+	logHandler "github.com/narqo/go-dice/Godeps/_workspace/src/github.com/apex/log/handlers/text"
 )
 
 var port string
@@ -21,7 +22,7 @@ func rollDice(w http.ResponseWriter, req *http.Request) {
 	}
 	dc, err := dice.Parse(dn[0])
 	if err != nil {
-		log.Print(err)
+		log.WithError(err).Debug("parse")
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
@@ -29,6 +30,9 @@ func rollDice(w http.ResponseWriter, req *http.Request) {
 }
 
 func main() {
+	log.SetHandler(logHandler.New(os.Stderr))
+	log.SetLevel(log.DebugLevel)
+
 	port := os.Getenv("PORT")
 	if port == "" {
 		log.Fatal("$PORT was not set")
@@ -37,6 +41,6 @@ func main() {
 	http.HandleFunc("/roll", rollDice)
 	err := http.ListenAndServe(":" + port, nil)
 	if err != nil {
-		log.Fatal("Cannot lister:", err)
+		log.WithError(err).Fatal("Cannot listen")
 	}
 }

@@ -3,9 +3,10 @@ package dice
 import (
 	"errors"
 	"fmt"
-	"log"
 	"strconv"
 	"strings"
+
+	"github.com/narqo/go-dice/Godeps/_workspace/src/github.com/apex/log"
 )
 
 type dice struct {
@@ -14,14 +15,25 @@ type dice struct {
 }
 
 func (d dice) Roll() int {
-	log.Print("rol: ", d)
+	log.WithFields(log.Fields{
+		"dice": d,
+	}).Debug("rol")
+
 	r := 0
 	for i := 0; i < d.num; i++ {
 		val := d.die.Roll()
-		log.Print("rol: ", d.die, " got: ", val)
+		log.WithFields(log.Fields{
+			"dice": d.die,
+			"got":  val,
+		}).Debug("rol")
 		r += val
 	}
-	log.Print("got: ", r)
+
+	log.WithFields(log.Fields{
+		"dice": d,
+		"got":  r,
+	}).Debug("rol")
+
 	return r
 }
 
@@ -30,7 +42,9 @@ func (d dice) String() string {
 }
 
 func Parse(notation string) (d *dice, err error) {
-	log.Printf("parse: notation=%s", notation)
+	log.WithFields(log.Fields{
+		"notation": notation,
+	}).Debug("parse")
 
 	var num int
 	var faces int
@@ -54,7 +68,10 @@ func Parse(notation string) (d *dice, err error) {
 		return nil, errors.New("bad notation \"" + notation + "\"")
 	}
 
-	log.Printf("parse: size=%d, faces=%d", num, faces)
+	log.WithFields(log.Fields{
+		"size":  num,
+		"faces": faces,
+	}).Debug("parse")
 
 	d = &dice{
 		num: num,
