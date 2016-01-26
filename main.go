@@ -11,15 +11,31 @@ import (
 	logHandler "github.com/narqo/go-dice/Godeps/_workspace/src/github.com/apex/log/handlers/text"
 )
 
-var port string
+var token string
+
+func checkAuth(intoken string) bool {
+	return intoken == token
+}
 
 func rollDice(w http.ResponseWriter, req *http.Request) {
 	q, _ := url.ParseQuery(req.URL.RawQuery)
+
+	intoken, ok := q["token"]
+	if !ok {
+		w.WriteHeader(http.StatusUnauthorized)
+		return
+	}
+	if !checkAuth(intoken[0]) {
+		w.WriteHeader(http.StatusForbidden)
+		return
+	}
+
 	dn, ok := q["text"]
 	if !ok {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
+
 	dc, err := dice.Parse(dn[0])
 	if err != nil {
 		log.WithError(err).Debug("parse")
@@ -36,6 +52,15 @@ func main() {
 	port := os.Getenv("PORT")
 	if port == "" {
 		log.Fatal("$PORT was not set")
+	}
+
+	token = os.Getenv("SLACK_TOKEN")
+	if token == "" {
+		log.Info("$SLACK_TOKEN was not set")
+	} else {
+		log.WithFields(log.Fields{
+			"token": token,
+		}).Debug("token")
 	}
 
 	http.HandleFunc("/roll", rollDice)
