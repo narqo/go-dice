@@ -6,9 +6,9 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/narqo/go-dice/dice"
 	"github.com/narqo/go-dice/Godeps/_workspace/src/github.com/apex/log"
-	logHandler "github.com/narqo/go-dice/Godeps/_workspace/src/github.com/apex/log/handlers/text"
+	logfmt "github.com/narqo/go-dice/Godeps/_workspace/src/github.com/apex/log/handlers/logfmt"
+	"github.com/narqo/go-dice/dice"
 )
 
 var token string
@@ -46,7 +46,7 @@ func rollDice(w http.ResponseWriter, req *http.Request) {
 }
 
 func main() {
-	log.SetHandler(logHandler.New(os.Stderr))
+	log.SetHandler(logfmt.New(os.Stderr))
 	log.SetLevel(log.DebugLevel)
 
 	port := os.Getenv("PORT")
@@ -64,7 +64,7 @@ func main() {
 	}
 
 	http.HandleFunc("/roll", rollDice)
-	err := http.ListenAndServe(":" + port, nil)
+	err := http.ListenAndServe(":"+port, nil)
 	if err != nil {
 		log.WithError(err).Fatal("Cannot listen")
 	}
