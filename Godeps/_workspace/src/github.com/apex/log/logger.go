@@ -1,9 +1,6 @@
 package log
 
-import (
-	stdlog "log"
-	"time"
-)
+import stdlog "log"
 
 // assert interface compliance.
 var _ Interface = (*Logger)(nil)
@@ -117,17 +114,15 @@ func (l *Logger) Trace(msg string) *Entry {
 	return NewEntry(l).Trace(msg)
 }
 
-// log the message, invoking the handler.
+// log the message, invoking the handler. We clone the entry here
+// to bypass the overhead in Entry methods when the level is not
+// met.
 func (l *Logger) log(level Level, e *Entry, msg string) {
 	if level < l.Level {
 		return
 	}
 
-	e.Level = level
-	e.Message = msg
-	e.Timestamp = time.Now()
-
-	if err := l.Handler.HandleLog(e); err != nil {
+	if err := l.Handler.HandleLog(e.finalize(level, msg)); err != nil {
 		stdlog.Printf("error logging: %s", err)
 	}
 }

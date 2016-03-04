@@ -6,8 +6,8 @@ import (
 	"os"
 	"sync"
 
-	"github.com/go-logfmt/logfmt"
 	"github.com/narqo/go-dice/Godeps/_workspace/src/github.com/apex/log"
+	"github.com/narqo/go-dice/Godeps/_workspace/src/github.com/go-logfmt/logfmt"
 )
 
 // Default handler outputting to stderr.

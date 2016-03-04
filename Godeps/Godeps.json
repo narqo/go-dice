@@ -7,7 +7,15 @@
 	"Deps": [
 		{
 			"ImportPath": "github.com/apex/log",
-			"Rev": "0df6dd6f3beb679ea47ec11b3aefc4edeed12f9f"
+			"Rev": "81a19e5c0054c0c0e546333bfc4eed40b5b9592f"
+		},
+		{
+			"ImportPath": "github.com/apex/log/handlers/logfmt",
+			"Rev": "81a19e5c0054c0c0e546333bfc4eed40b5b9592f"
+		},
+		{
+			"ImportPath": "github.com/go-logfmt/logfmt",
+			"Rev": "ffc984a0eaff44e46e1f42d6e0a65b665587a938"
 		}
 	]
 }
